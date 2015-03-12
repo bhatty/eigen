@@ -83,6 +83,12 @@ const static CGFloat ARCarouselDelay = 10;
 
         self.view.userInteractionEnabled = YES;
         [self updateViewWithHeroUnits:heroUnits];
+
+        // Grab all but the first and try to pre-download them.
+        [[heroUnits subarrayWithRange:NSMakeRange(1, heroUnits.count-1)] each:^(SiteHeroUnit *unit) {
+            [SDWebImageManager.sharedManager downloadImageWithURL:unit.preferredImageURL options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {}];
+        }];
+
         [self startTimer];
 
     } failure:^(NSError *error) {
